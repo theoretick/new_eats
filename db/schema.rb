@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150107031240) do
+ActiveRecord::Schema.define(version: 20150107042735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,10 @@ ActiveRecord::Schema.define(version: 20150107031240) do
     t.text    "viewport"
     t.spatial "location", limit: {:srid=>4326, :type=>"point"}
     t.spatial "point",    limit: {:srid=>4326, :type=>"point"}
+  end
+
+  create_table "city_boundaries", force: true do |t|
+    t.integer "city_id"
     t.spatial "boundary", limit: {:srid=>0, :type=>"polygon"}
   end
 

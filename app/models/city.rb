@@ -3,14 +3,12 @@ class City < ActiveRecord::Base
   serialize :viewport
 
   has_many :locales
+  has_many :city_boundaries
 
-  FACTORY = RGeo::Geographic.spherical_factory(:srid => 4326)
-
+  FACTORY = RGeo::Geographic.simple_mercator_factory
   set_rgeo_factory_for_column(:location, FACTORY)
-  set_rgeo_factory_for_column(:boundary, FACTORY)
 
-  attr_accessible :name,
-                  :location,
-                  :boundary,
-                  :viewport
+  def boundaries
+    city_boundaries.map(&:boundary)
+  end
 end

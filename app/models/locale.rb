@@ -2,8 +2,15 @@ class Locale < ActiveRecord::Base
 
   belongs_to :city
 
-  attr_accessible :name,
-                  :location,
-                  :opened_at
+  FACTORY = RGeo::Geographic.simple_mercator_factory
+  set_rgeo_factory_for_column(:location, FACTORY)
 
+  before_save :set_city!, if: -> { |x| x.location.present? }
+
+
+  def set_city!
+    # OR need as_text + ST_GeomFromText(?, 4326)
+    boundary = CityBoundary.find_by('ST_Intersects(city_boundaries.boundary, ?', location)
+    self.city_id = boundary.city_id
+  end
 end
