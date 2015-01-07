@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgis
+  encoding: utf8
+  postgis_extension: true
+  database: 'new_eats_dev'
+  host: 127.0.0.1
+  # schema_search_path: public,postgis
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  database: 'new_eats_test'
+
+production:
+  <<: *default
+  database: 'new_eats_production'
