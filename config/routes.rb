@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root 'site#index'
 
+  get 'wkt/polygon.json' => 'wkt#polygon'
+  get 'wkt/pdx.json' => 'wkt#pdx'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
