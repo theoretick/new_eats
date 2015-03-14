@@ -26,9 +26,15 @@ ActiveRecord::Schema.define(version: 20150107042735) do
   end
 
   create_table "city_boundaries", force: true do |t|
-    t.integer "city_id"
-    t.spatial "boundary", limit: {:srid=>0, :type=>"polygon"}
+    t.integer  "city_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.spatial  "boundary",   limit: {:srid=>4326, :type=>"polygon"}, null: false
+    t.spatial  "location",   limit: {:srid=>4326, :type=>"point"}
   end
+
+  add_index "city_boundaries", ["boundary"], :name => "index_city_boundaries_on_boundary", :spatial => true
+  add_index "city_boundaries", ["city_id"], :name => "index_city_boundaries_on_city_id"
 
   create_table "locales", force: true do |t|
     t.string  "name",                                           default: "", null: false

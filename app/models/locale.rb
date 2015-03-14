@@ -7,10 +7,10 @@ class Locale < ActiveRecord::Base
 
   before_save :set_city!, if: -> { |x| x.location.present? }
 
-
   def set_city!
-    # OR need as_text + ST_GeomFromText(?, 4326)
-    boundary = CityBoundary.find_by('ST_Intersects(city_boundaries.boundary, ?', location)
+    boundary = CityBoundary.find_by(
+      'ST_Intersects(city_boundaries.boundary, ST_GeomFromText(?, 4326))',
+      location.as_text)
     self.city_id = boundary.city_id
   end
 end

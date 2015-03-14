@@ -3,7 +3,7 @@ class City < ActiveRecord::Base
   serialize :viewport
 
   has_many :locales
-  has_many :city_boundaries
+  has_many :city_boundaries, dependent: :delete_all
 
   FACTORY = RGeo::Geographic.simple_mercator_factory
   self.rgeo_factory_generator = FACTORY
