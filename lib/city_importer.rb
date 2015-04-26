@@ -20,21 +20,31 @@ module CityImporter
 
       RGeo::Shapefile::Reader.open(shapefile_path) do |file|
         file.each do |record|
-          attributes = record.attributes
-          _city =  City.where(name: attributes["CITYNAME"]).first_or_initialize
-
-          boundaries = record.geometry.reduce([]) do |all_boundaries, geom|
-            all_boundaries << CityBoundary.new(city: _city, boundary: geom)
-          end
-
-          _city.city_boundaries = boundaries
-
-          if _city.save
-            puts "Attached City: #{_city.name} to #{_city.boundaries.size} boundaries"
+          if opts[:klass] == 'City'
+            import_city_with_boundaries(record)
           end
         end
         file.rewind
         record = file.next
+      end
+    end
+
+    private
+
+    def import_city_with_boundaries(record)
+      attributes = record.attributes
+      _city =  City.where(name: attributes["CITYNAME"]).first_or_initialize
+
+      boundaries = record.geometry.reduce([]) do |all_boundaries, geom|
+        all_boundaries << Boundary.new(boundable: _city, boundary: geom)
+      end
+
+      _city.boundaries = boundaries
+
+      if _city.save
+        puts "Attached City: #{_city.name} to #{_city.boundaries.size} boundaries"
+      else
+        puts "Failed to save city: #{_city.name} w/ errors: #{_city.errors.full_messages.join(',')}"
       end
     end
 

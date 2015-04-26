@@ -31,14 +31,15 @@ class WktController < ApplicationController
   def pdx
     pdx = City.find_by(name: 'Portland')
 
-    # pdx_points = pdx.city_boundaries.reduce([]) do |acc, bound|
-    #   acc += build_points_from_polygon(bound.boundary.as_text)
-    # end
-    pdx_points = build_points_from_polygon(pdx.city_boundaries.first.boundary.as_text)
+    if pdx
+      pdx_points = build_points_from_polygon(pdx.boundaries.first.boundary.as_text)
 
-    render json: {
-      points: pdx_points
-    }
+      render json: {
+        points: pdx_points
+      }
+    else
+      render json: {}, status: 404
+    end
   end
 
   private

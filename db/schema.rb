@@ -11,11 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150107042735) do
+ActiveRecord::Schema.define(version: 20150426194923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "boundaries", force: true do |t|
+    t.integer  "boundable_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.spatial  "boundary",       limit: {:srid=>4326, :type=>"polygon"},                  null: false
+    t.spatial  "location",       limit: {:srid=>4326, :type=>"point"}
+    t.string   "boundable_type",                                         default: "City", null: false
+  end
+
+  add_index "boundaries", ["boundable_id"], :name => "index_boundaries_on_boundable_id"
+  add_index "boundaries", ["boundary"], :name => "index_boundaries_on_boundary", :spatial => true
 
   create_table "cities", force: true do |t|
     t.string  "name",                                           default: "", null: false
@@ -24,17 +36,6 @@ ActiveRecord::Schema.define(version: 20150107042735) do
     t.spatial "location", limit: {:srid=>4326, :type=>"point"}
     t.spatial "point",    limit: {:srid=>4326, :type=>"point"}
   end
-
-  create_table "city_boundaries", force: true do |t|
-    t.integer  "city_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.spatial  "boundary",   limit: {:srid=>4326, :type=>"polygon"}, null: false
-    t.spatial  "location",   limit: {:srid=>4326, :type=>"point"}
-  end
-
-  add_index "city_boundaries", ["boundary"], :name => "index_city_boundaries_on_boundary", :spatial => true
-  add_index "city_boundaries", ["city_id"], :name => "index_city_boundaries_on_city_id"
 
   create_table "locales", force: true do |t|
     t.string  "name",                                           default: "", null: false

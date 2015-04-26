@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get 'wkt/polygon.json' => 'wkt#polygon'
   get 'wkt/pdx.json' => 'wkt#pdx'
 
+  resources :locales
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
