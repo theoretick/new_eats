@@ -7,4 +7,6 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 City.create(name: 'Portland', location: 'POINT(-122.6764816 45.5230622)')
-Locale.create(name: 'Los Gorditos', location: 'POINT(-122.680723 45.524278)', city_id: City.find_by(name: 'Portland').id)
+Locale.create(name: 'A Roadside Attraction', location: 'POINT(-122.653306 45.515642)', city_id: City.pdx.id)
+Locale.create(name: 'Los Gorditos', location: 'POINT(-122.680723 45.524278)', city_id: City.pdx.id)
+Locale.create(name: 'Low Brow', location: 'POINT(-122.681882 45.527089)', city_id: City.pdx.id)

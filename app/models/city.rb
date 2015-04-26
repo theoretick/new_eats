@@ -9,6 +9,10 @@ class City < ActiveRecord::Base
   self.rgeo_factory_generator = FACTORY
   set_rgeo_factory_for_column(:location, FACTORY)
 
+  def self.pdx
+    find_by(name: 'Portland')
+  end
+
   def boundaries
     city_boundaries.map(&:boundary)
   end

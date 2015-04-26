@@ -1,26 +1,22 @@
 
 $(document).ready(function() {
 
-    var portland_coords     = [45.5230622, -122.6764816],
-        london_coords       = [51.505, -0.09],
-        los_gorditos_coords = [45.524278, -122.680723];
+    var DEFAULT_ZOOM = 7;
 
-    $.getJSON( "wkt/test.json", function( data ) {
+    var pdx_geo_center_coords    = [45.5230622, -122.6764816],
+        london_geo_center_coords = [51.505, -0.09],
+        pdx_los_gorditos_coords  = [45.524278, -122.680723];
+
+    $.getJSON( "wkt/pdx.json", function( data ) {
         var points = data.points;
 
-        for (i = 0, j = points.length; i < j; i++) {
-            var split_points = points[i].split(',');
-            var lat = split_points[0];
-            var lng = split_points[1];
-
-            ne.render.draw_point([lat, lng]);
-        };
-        // ne.render.draw_polygon(data.points);
+        // ne.render.draw_multi_point(points);
+        ne.render.draw_polygon(points);
     });
 
 
     initmap();
-    map.setView(portland_coords, 13);
+    map.setView(pdx_geo_center_coords, DEFAULT_ZOOM);
 
     // ne.render.draw_point(los_gorditos_coords);
 });

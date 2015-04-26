@@ -15,6 +15,15 @@ var ne = {
             }).addTo(map);
         },
 
+        draw_multi_point: function (coords) {
+            for (i = 0, j = points.length; i < j; i++) {
+                var lat = points[i][0];
+                var lng = points[i][1];
+
+                ne.render.draw_point([lat, lng]);
+            };
+        },
+
         draw_circle: function (coords) {
           ne.render.draw_point(coords, 500);
         },
@@ -22,5 +31,6 @@ var ne = {
         draw_polygon: function (coords) {
           var polygon = L.polygon(coords).addTo(map);
         }
+
     }
 };
