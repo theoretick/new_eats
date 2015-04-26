@@ -18,15 +18,12 @@ module CityImporter
     def self.execute(shapefile_path, opts = default_opts)
       City.delete_all unless opts[:update_only]
 
-      factory = RGeo::Geographic.projected_factory(:projection_proj4 => "+proj=aea +lat_1=43 +lat_2=48 +lat_0=34 +lon_0=-120 +x_0=600000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs ")
-      RGeo::Shapefile::Reader.open(shapefile_path, factory: factory.projection_factory) do |file|
+      RGeo::Shapefile::Reader.open(shapefile_path) do |file|
         file.each do |record|
           attributes = record.attributes
           _city =  City.where(name: attributes["CITYNAME"]).first_or_initialize
 
-          unprojected_geometry = factory.unproject(record.geometry)
-
-          boundaries = unprojected_geometry.reduce([]) do |all_boundaries, geom|
+          boundaries = record.geometry.reduce([]) do |all_boundaries, geom|
             all_boundaries << CityBoundary.new(city: _city, boundary: geom)
           end
 

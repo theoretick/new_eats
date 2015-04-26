@@ -1,10 +1,14 @@
 require 'rake'
-require_relative '../oregon_city_importer'
+require_relative '../city_importer'
 
 namespace :city_importer do
-  task :execute => :environment do |t, args|
-    oregon_city_limits_2013_url = 'http://navigator.state.or.us/sdl/data/shapefile/k24/citylim_2013.zip'
-    filepath = CityImporter::Downloader.execute(oregon_city_limits_2013_url)
-    CityImporter::Importer.execute(filepath)
+  task :remote_import, [:url] => :environment do |t, args|
+    shapes_path = CityImporter::Downloader.execute(args[:url])
+    CityImporter::Importer.execute(shapes_path)
+  end
+
+  task :local_import => :environment do |t, args|
+    shapes_path = Rails.root.join('lib/shapes/pdx_city_limits_poly/pdx_city_limits_poly.shp').to_s
+    CityImporter::Importer.execute(shapes_path)
   end
 end
